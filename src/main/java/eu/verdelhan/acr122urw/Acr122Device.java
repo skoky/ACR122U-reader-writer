@@ -24,7 +24,11 @@
 package eu.verdelhan.acr122urw;
 
 import java.io.IOException;
+import java.util.List;
+import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
+import javax.smartcardio.TerminalFactory;
+
 import org.nfctools.mf.MfCardListener;
 import org.nfctools.spi.acs.Acr122ReaderWriter;
 import org.nfctools.spi.acs.AcsTerminal;
@@ -42,6 +46,19 @@ public class Acr122Device extends AcsTerminal {
      * Constructor.
      */
     public Acr122Device() {
+
+        TerminalFactory terminalFactory = TerminalFactory.getDefault();
+
+        List<CardTerminal> terminals = null;
+        try {
+            terminals = terminalFactory.terminals().list();
+        } catch (CardException e) {
+            e.printStackTrace();
+        }
+        for (CardTerminal terminal : terminals) {
+           System.out.println("Terminal:"+terminal.getName());
+        }
+
         CardTerminal terminal = CardTerminalUtils.getTerminalByName("ACR122");
         setCardTerminal(terminal);
         readerWriter = new Acr122ReaderWriter(this);
